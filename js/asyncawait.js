@@ -1,18 +1,24 @@
 /**
  * 使用 Generator 与 Promise 模拟实现 async/await
  */
+
 function myAsync(task) {
     const gen = task();
 
-    function runner(data) {
-        const nextObj = gen.next(data);
-        if (nextObj.done || !(nextObj.value instanceof Promise)) {
-            return;
-        }
-        nextObj.value.then(runner);
-    }
+    return new Promise((resolve, reject) => {
 
-    runner();
+        function runner(data) {
+            const nextObj = gen.next(data);
+            if (nextObj.done) {
+                return resolve(nextObj.value);
+            }
+            Promise.resolve(nextObj.value)
+                .then(runner)
+                .catch(reject);
+        }
+    
+        runner();
+    });
 }
 
 function sleep(ms) {
@@ -27,13 +33,23 @@ function fetchData() {
     });
 }
 
-function* task() {
-    console.log("start...");
+function* task1() {
+    console.log("task1: start...");
     yield sleep(5000);
-    console.log("done sleep, now fetch data...");
+    console.log("task1: done sleep, now fetch data...");
     const data = yield fetchData();
-    console.log("data:", data);
-    console.log("end...");
+    console.log("task1:", data);
+    return "this is end";
 }
 
-myAsync(task);
+myAsync(task1)
+    .then((data) => console.log("task1:", data));
+
+function* task2() {
+    console.log("task2: start...");
+    yield Promise.reject("this is an error");
+    console.log("task2: end...");
+}
+
+myAsync(task2)
+    .catch((err) => console.log("task2:", err));
