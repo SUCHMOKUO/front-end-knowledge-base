@@ -8,7 +8,12 @@ function myAsync(task) {
     return new Promise((resolve, reject) => {
 
         function runner(data) {
-            const nextObj = gen.next(data);
+            let nextObj;
+            try {
+                nextObj = gen.next(data);
+            } catch (err) {
+                return reject(err);
+            }
             if (nextObj.done) {
                 return resolve(nextObj.value);
             }
@@ -16,7 +21,7 @@ function myAsync(task) {
                 .then(runner)
                 .catch(reject);
         }
-    
+
         runner();
     });
 }
@@ -53,3 +58,11 @@ function* task2() {
 
 myAsync(task2)
     .catch((err) => console.log("task2:", err));
+
+function* task3() {
+    console.log("task3: start...");
+    throw "this is an error";
+}
+
+myAsync(task3)
+    .catch((err) => console.log("task3:", err));
