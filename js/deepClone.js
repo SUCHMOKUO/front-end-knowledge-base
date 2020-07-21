@@ -1,10 +1,8 @@
-function isRefType(val) {
-  return val instanceof Object;
-}
+const { isReferenceType } = require("./utils");
 
 function deepClone(obj, cloneObjMap = new WeakMap(), parent = null) {
   // 非引用类型直接复制
-  if (!isRefType(obj)) {
+  if (!isReferenceType(obj)) {
     return obj;
   }
 

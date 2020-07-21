@@ -1,4 +1,4 @@
-const { isObject } = require("./utils");
+const { isObject, isReferenceType } = require("./utils");
 
 function A(n) {
   this.a = n;
@@ -18,7 +18,7 @@ function myNew(clazz, ...args) {
   const ret = clazz.apply(obj, args);
 
   // return.
-  return isObject(ret) ? ret : obj;
+  return isReferenceType(ret) ? ret : obj;
 }
 
 const b = myNew(A, 23);
