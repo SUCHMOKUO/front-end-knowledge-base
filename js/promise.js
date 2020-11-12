@@ -1,4 +1,4 @@
-const { isObject } = require("./utils");
+const { isReferenceType } = require("./utils");
 
 function isFunction(f) {
   return typeof f === "function";
@@ -104,7 +104,7 @@ class MyPromise {
     }
 
     // 处理 thenable
-    if (isObject(x) || isFunction(x)) {
+    if (isReferenceType(x) || isFunction(x)) {
       try {
         const then = x.then;
         if (isFunction(then)) {

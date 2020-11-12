@@ -1,4 +1,4 @@
-const { isObject, isReferenceType } = require("./utils");
+const { isReferenceType } = require("./utils");
 
 function A(n) {
   this.a = n;
@@ -10,7 +10,7 @@ const a = new A(12);
 function myNew(clazz, ...args) {
   // set prototype.
   const clazzProto = clazz.prototype;
-  const proto = isObject(clazzProto) ? clazzProto : Object.prototype;
+  const proto = isReferenceType(clazzProto) ? clazzProto : Object.prototype;
 
   const obj = Object.create(proto);
 
