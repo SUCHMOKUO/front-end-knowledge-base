@@ -8,10 +8,9 @@ function A(n) {
 const a = new A(12);
 
 function myNew(clazz, ...args) {
-  // set prototype.
+  // create a new object and set prototype.
   const clazzProto = clazz.prototype;
   const proto = isReferenceType(clazzProto) ? clazzProto : Object.prototype;
-
   const obj = Object.create(proto);
 
   // apply constructor.
